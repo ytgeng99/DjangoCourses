@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Courses</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                font-family: arial, sans-serif;
+            }
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        {% if messages %}
+        <div style="color:red;">
+            <h3>ERRORS:</h3>
+            <ul>
+                {% for message in messages %}
+                <li>{{message}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <h1>Add a new course</h1>
+        <form action={% url 'courses:add' %} method="POST">
+            {% csrf_token %}
+            <label for="name">Name: </label><br>
+            <input type="text" name="name" id="name">
+            <br><br>
+            <label for="description">Description: </label><br>
+            <input type="text" name="description" id="description">
+            <br><br>
+            <input type="submit" value="Add">
+        </form>
+        {% if courses %}
+            <h1>Courses</h1>
+            <table>
+                <tr>
+                    <th>Course Name</th>
+                    <th>Description</th>
+                    <th>Date Added</th>
+                    <th>Actions</th>
+                </tr>
+                {% for course in courses %}
+                <tr>
+                    <td>{{course.name}}</td>
+                    <td>{{course.description}}</td>
+                    <td>{{course.date_added}}</td>
+                    <td><a href={% url 'courses:destroy' id=course.id %}>remove</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </body>
+</html>
